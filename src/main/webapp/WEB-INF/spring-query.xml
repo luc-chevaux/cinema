@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<bean id="queries" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="FIND_ALL_SCHEDULES"
+					value="SELECT 
+						    sc.idSchedule idSchedule,
+						    sc.scheduleDate scheduleDate,
+						    sl.slotId slotId,
+						    sl.slotDescription slotDescription,
+						    sl.slotStartTime slotStartTime,
+						    sl.slotEndTime slotEndTime,
+						    sl.slotPaused slotPaused,
+						    mo.movieId movieId,
+						    mo.movieName movieName,
+						    mo.movieRating movieRating,
+						    mo.movieGenre movieGenre,
+						    mo.countryId countryId,
+							co.countryName countryName,
+							co.countryAcronym countryAcronym,
+						    mo.moviePrice moviePrice,
+						    th.theatreId theatreId,
+						    th.theatreShowsNumber theatreShowsNumber,
+						    th.theatreRows theatreRows,
+						    th.theatreColumns theatreColumns,
+						    th.theatreName theatreName
+						FROM
+						    Schedules sc,
+						    Slot sl,
+						    Movies mo,
+						    Theatres th,
+							Countries co
+						WHERE
+						    sc.movieId = mo.movieId
+								AND mo.countryId = co.countryId
+						        AND sc.slotId = sl.slotId
+						        AND sc.theatreId = th.theatreId
+						        AND sc.scheduleDate >= DATE_FORMAT(NOW(),'%Y-%m-%d')
+						ORDER BY sc.scheduleDate DESC , sl.slotStartTime" />
+				<entry key="FIND_ALL_SCHEDULES_COUNT"
+					value="SELECT COUNT(*) FROM Schedules sc, Slot sl, Movies mo, Theatres th WHERE sc.movieId = mo.movieId AND sc.slotId = sl.slotId AND sc.theatreId = th.theatreId AND sc.scheduleDate >= DATE_FORMAT(NOW(),'%Y-%m-%d')" />
+
+				<entry key="FIND_ALL_PURCHASE_BY_USER"
+					value="SELECT 
+						    pu.purchaseId,
+						    pu.purchaseDate,
+						    pu.purchasePrice,
+						    pu.purchaseSitCode,
+						    sc.idSchedule,
+							sc.scheduleDate,
+							sl.slotId,
+							sl.slotDescription,
+							sl.slotStartTime,
+							sl.slotEndTime,
+							sl.slotPaused,
+							th.theatreId,
+							th.theatreShowsNumber,
+							th.theatreRows,
+							th.theatreColumns,
+							th.theatreName, 
+						    cu.customerId,
+							cu.customerUsername,
+							cu.customerEmail,
+							cu.customerPassword,
+						    mo.movieId,
+						    mo.movieName,
+						    mo.movieGenre,
+						    mo.moviePrice,
+							co.countryId,
+							co.countryName,
+							co.countryAcronym
+						FROM
+						    Purchases pu,
+						    Schedules sc,
+						    Movies mo,
+						    Theatres th,
+						    Customers cu,
+						    Countries co,
+							Slot sl
+						WHERE
+						    pu.scheduleId = sc.idSchedule
+						        AND pu.customerId = cu.customerId
+								AND sc.slotId = sl.slotId
+						        AND sc.theatreId = th.theatreId
+						        AND sc.movieId = mo.movieId
+						        AND co.countryId = mo.countryId
+						        AND cu.customerUsername = ? "/>
+
+				<entry key="FIND_ALL_PURCHASE_COUNT"
+					value="SELECT 
+						    COUNT(*)
+						FROM
+						    Purchases pu,
+						    Schedules sc,
+						    Movies mo,
+						    Theatres th,
+						    Customers cu,
+						    Countries co,
+							Slot sl
+						WHERE
+						    pu.scheduleId = sc.idSchedule
+						        AND pu.customerId = cu.customerId
+								AND sc.slotId = sl.slotId
+						        AND sc.theatreId = th.theatreId
+						        AND sc.movieId = mo.movieId
+						        AND co.countryId = mo.countryId
+						        AND cu.customerUsername = ? "/>
+				<entry key="FIND_SCHEDULE_BY_ID" 
+					value="SELECT 
+								mo.movieId,
+								mo.movieName, 
+								mo.movieGenre,
+								mo.moviePrice,
+								sc.idSchedule,
+								sc.scheduleDate,
+								sl.slotId,
+								sl.slotDescription,
+								sl.slotStartTime, 
+								sl.slotEndTime,
+								sl.slotPaused,
+								th.theatreId, 
+								th.theatreName, 
+								th.theatreShowsNumber,
+								th.theatreRows,
+								th.theatreColumns,
+								th.theatreName,
+								co.countryId,	
+								co.countryName,
+								co.countryAcronym
+							FROM 
+								Schedules sc,
+								Theatres th,
+								Movies mo,
+								Slot sl,
+								Countries co
+							WHERE 
+								sc.movieId = mo.movieId AND
+								mo.countryId = co.countryId AND
+								sc.theatreId = th.theatreId AND 
+								sc.slotId = sl.slotId AND
+								sc.idSchedule = ?" />
+				<entry key="FIND_CUSTOMER_BY_NAME" 
+					value="SELECT customerId, 
+								customerUsername, 
+								customerEmail 
+							FROM 
+								Customers cu 
+							WHERE 
+								cu.customerUsername = ?"/>
+				<entry key="INSERT_PURCHASE"
+					value="INSERT INTO Purchases (purchaseDate, customerId, scheduleId, purchaseSitCode, purchaseCCNumber, purchasePrice) 
+							VALUES (?, ?, ?, ?, ?, ?)"/>
+				<entry key="INSERT_CUSTOMER"
+					value="INSERT INTO Customers (customerUsername, customerEmail, customerPassword) 
+							VALUES (?, ?, ?)"/>							
+							 
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <security:global-method-security secured-annotations="enabled" />
+    
+    <security:http auto-config="true">
+        <!-- ANONYMOUS ACCESS -->
+        <security:intercept-url pattern="/index.html" access="IS_AUTHENTICATED_ANONYMOUSLY" method="GET"/>
+        <security:intercept-url pattern="/register.html" access="IS_AUTHENTICATED_ANONYMOUSLY" method="GET"/>
+        <security:intercept-url pattern="/processRegistration" access="IS_AUTHENTICATED_ANONYMOUSLY" method="POST"/>
+        <security:intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY" method="POST"/>
+        <security:intercept-url pattern="/j_spring_security_logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" method="GET"/>
+        <security:intercept-url pattern="/upcomingSchedules**" access="ROLE_USER" method="GET"/>
+        <security:intercept-url pattern="/shoppingCart**" access="ROLE_USER" method="GET"/>
+        <security:intercept-url pattern="/movieSearch**" access="ROLE_USER" method="GET"/>
+        <security:intercept-url pattern="/rest/**" access="ROLE_USER" method="GET"/>
+        <security:intercept-url pattern="/error.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        
+        <!-- Restrict other URLs -->
+        <security:intercept-url pattern="/welcome.html" access="ROLE_USER" />
+
+        <!-- Override default login and logout pages -->
+        <security:form-login login-page="/index.html" 
+                             default-target-url="/welcome.html" 
+                             authentication-failure-url="/login-error.html" />
+        <security:logout logout-url="/logout" logout-success-url="/index.html" />
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+        	<security:password-encoder hash="md5">
+        		<security:salt-source system-wide="CCBill"/>
+        	</security:password-encoder>
+        	<security:jdbc-user-service data-source-ref="myDs" 
+        								users-by-username-query="select c.customerUsername, c.customerPassword, 'true' as enabled from Customers c where c.customerUsername = ?" 
+        								authorities-by-username-query="select c.customerUsername, ap.appRoleAuthority from Customers c, appRoles ap where c.customerId = ap.customerId and c.customerUsername = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome to the CCBill Cinema!</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link th:href="@{/resources/css/layout.css}" rel="stylesheet" />
+
+<!-- jquery ui theme -->
+<link
+	th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"
+	rel="stylesheet" />
+</head>
+<body>
+	<div id="ccapp-container" class="panel panel-default">
+		<div class="aligned-center">
+			<img th:src="@{/resources/img/ui/logoCCBill.png}" class="cinemaLogo" />
+		</div>
+		<div class="page-header">
+			<h2>Shopping Cart</h2>
+		</div>
+		<ul class="breadcrumb">
+			<li><a href="/CCBillCinema/">Home</a> <span class="divider">/</span></li>
+			<li class="active">Shopping Cart</li>
+		</ul>
+		<span th:text="${thanks}"></span>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">User Panel</h3>
+			</div>
+			<div class="panel-body panel-primary">
+				<a th:href="@{/j_spring_security_logout}" class="btn btn-danger">Logout
+					<i class="icon-white icon-cog"></i>
+				</a> <a th:href="@{/welcome.html}" class="btn btn-primary">Upcoming
+					schedules<i class="icon-white icon-facetime-video"></i>
+				</a> <a th:href="@{/upcomingSchedules/search.html}"
+					class="btn btn-warning">Schedule Search <i
+					class="icon-white icon-facetime-video"></i></a>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading">
+				<strong>Here is your purchase history</strong>
+			</div>
+			<div class="panel-body">
+				<p>Thank you very much to be our customer. Select a book then
+					click for Refund, if is available.</p>
+				<div class="pagination pagination-small">
+					<ul id="paginator">
+
+					</ul>
+				</div>
+				<div id="DynamicGridLoading">
+					<img th:src="@{/resources/img/ui/loading.gif}" /><span>
+						Loading Data... </span>
+				</div>
+			</div>
+			<div id="DynamicGrid"></div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+	<!-- loads script after for better performance-->
+	<!-- load jquery -->
+	<script th:src="@{/resources/js/jquery/jquery-2.0.3.min.js}"></script>
+
+	<!-- load twitter bootstrap -->
+	<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+	<!-- load jquery ui -->
+	<script
+		th:src="@{/resources/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js}"></script>
+
+	<!-- load cinema core script -->
+	<script th:src="@{/resources/js/core-lib/cinema.js}"></script>
+</body>
+</html>

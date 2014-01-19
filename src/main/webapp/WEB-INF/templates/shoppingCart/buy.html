@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Welcome to the CCBill Cinema!</title>
+	
+	<!-- Bootstrap core CSS -->
+    <link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/resources/css/layout.css}" rel="stylesheet"/>
+    
+    <!-- jquery ui theme -->
+    <link th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}" rel="stylesheet" />
+</head>
+<body>
+    <div id="ccapp-container" class="panel panel-default">
+    	<div class="aligned-center">
+			<img th:src="@{/resources/img/ui/logoCCBill.png}" class="cinemaLogo"/>
+		</div>
+	    <div class="page-header">
+   			<h2>Book a reservation for <span th:text="${schedule.movie.movieName}"></span></h2>
+   		</div>
+   		<ul class="breadcrumb">
+		    <li><a href="/CCBillCinema/">Home</a> <span class="divider">/</span></li>
+		    <li><a href="/CCBillCinema/shoppingCart/cart.html">Shopping Cart</a> <span class="divider">/</span></li>
+		    <li class="active">Book</li>
+	    </ul>
+		<div class="panel panel-default">
+	  		<div class="panel-heading">
+	    		<h3 class="panel-title">User Panel</h3>
+	  		</div>
+	  		<div class="panel-body panel-primary">		
+				<a th:href="@{/j_spring_security_logout}" class="btn btn-danger">Logout <i class="icon-white icon-cog"></i></a>
+				<a th:href="@{/index.html}" class="btn btn-primary">Upcoming schedules <i class="icon-white icon-facetime-video"></i></a>
+				<a th:href="@{/upcomingSchedules/search.html}" class="btn btn-warning">Schedule Search <i class="icon-white icon-facetime-video"></i></a>
+	  		</div>
+		</div>
+		
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading"><strong>Do you want to watch <b th:text="${schedule.movie.movieName}"/>? Book here!</strong></div>
+		  <div class="panel-body">
+		  	    <ul class="thumbnails clearRight">
+				    <li class="span5">
+					    <div class="thumbnail">
+						    <img th:attr="data-src=@{'holder.js/460x200'}" alt="Beautiful movie to watch!"/>
+						    <h4>Trama</h4>
+						    <p class="justified">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					    </div>
+				    </li>
+			    </ul>
+			    
+			    <ul class="thumbnails clearRight">
+				    <li class="span5 resumeTable">
+					    <table class="table">
+					  		<tr>
+					  			<td><strong>ScheduleId</strong></td>
+					  			<td><span class="badge" th:text="${schedule.idSchedule}"></span></td>
+					  		</tr>
+					  		<tr>
+					  			<td><strong>Theatre name</strong></td>
+					  			<td th:text="${schedule.theatre.theatreName}"></td>
+					  		</tr>
+					  		<tr>
+					  			<td><strong>Movie name</strong></td>
+					  			<td th:text="${schedule.movie.movieName}"></td>
+					  		</tr>
+					  		<tr>
+					  			<td><strong>Schedule date</strong></td>
+					  			<td th:text="${schedule.scheduleDate}"></td>
+					  		</tr>
+					  		<tr>
+					  			<td><strong>Starts at</strong></td>
+					  			<td th:text="${schedule.slot.slotStartTime}"></td>
+					  		</tr>
+					  		<tr>
+					  			<td><strong>Ends at</strong></td>
+					  			<td th:text="${schedule.slot.slotEndTime}"></td>
+					  		</tr>
+					  	</table>
+				    </li>
+			    </ul>
+			    <div>
+			    	<ul class="thumbnails clearRight">
+			    	<li class="span3 ccPanel">
+			    		<form action="#" id="buy" th:action="@{/shoppingCart/buyScheduledEvent}" th:object="${creditCardModel}" method="POST">
+			    			<label>Cart credit number: </label>
+			    			<input type="text" th:field="*{creditNumber}" name="creditNumber" placeholder="Insert your credit card number"/>
+		  					<label>CVV2: </label>
+		  					<input type="text" th:field="*{creditSecurity}" name="creditSecurity" placeholder="Insert your cvv2"/>
+		  					<input type="hidden" th:field="*{idSchedule}" name="idSchedule" th:value="*{idSchedule}"/>
+		  					<br/>
+		  					<a id="book-now" class="btn btn-success">Book now <i class="icon-white icon-lock"></i></a>
+			    		</form>
+			    	</li>
+			   		</ul>
+			    </div>
+		</div>
+	</div>
+	</div>
+	<div class="dialog-confirm" title=""></div>
+	<div class="dialog-info" title=""></div>
+	<div class="dialog-error" title=""></div>
+	
+	<!-- loads script after for better performance-->
+	<!-- load jquery -->
+    <script th:src="@{/resources/js/jquery/jquery-2.0.3.min.js}"></script>
+    
+    <!-- load twitter bootstrap -->
+    <script th:src="@{/resources/js/bootstrap.min.js}"></script>
+    
+    <!-- load jquery ui -->
+	<script th:src="@{/resources/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js}"></script>
+	
+	<!-- load cinema core script -->
+	<script th:src="@{/resources/js/core-lib/cinema.js}"></script>
+	
+	<!-- load holder script -->
+	<script th:src="@{/resources/js/holder/holder.js}"></script>
+</body>
+</html>
