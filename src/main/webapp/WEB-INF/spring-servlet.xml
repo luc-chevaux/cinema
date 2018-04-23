@@ -14,8 +14,7 @@
 	<!--  RESOURCE FOLDERS CONFIGURATION                                  -->
 	<!--  Dispatcher configuration for serving static resources           -->
 	<!-- **************************************************************** -->
-	<mvc:resources mapping="/resources/**" 
-				   location="/WEB-INF/resources/"/>
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"/>
 	
 	<mvc:default-servlet-handler />
 	
